@@ -24,10 +24,10 @@ import org.apache.tika.TikaTest;
 public class NTFSParserTest extends TikaTest {
 
     // This test currently uses a very simple dummy file "test-ntfs.img"
-    // which only has the "NTFS" signature. SleuthKit will not be able to
-    // fully parse this as a valid NTFS image.
-    // A more comprehensive test would require a real, small NTFS image
-    // containing known files and directories.
+    // which only has the "NTFS" signature. SleuthKit (used by FileSystemParser)
+    // might not be able to fully parse this as a valid NTFS image without more structure.
+    // A more comprehensive test would require a real, small file system image
+    // (NTFS, FAT, etc.) containing known files and directories.
 
     // protected ParseContext recursingContext;
     // private Parser autoDetectParser;
@@ -48,7 +48,7 @@ public class NTFSParserTest extends TikaTest {
         // XMLResult xml = getXML("small_ntfs_test_image.img");
         XMLResult xml = getXML("raw_ntfs_image.img");
         System.out.println(xml.xml);
-        assert xml.xml.contains("NTFSParser");
+        assert xml.xml.contains("FileSystemParser");
 
         // ContentHandler handler = new BodyContentHandler();
         // Metadata metadata = new Metadata();

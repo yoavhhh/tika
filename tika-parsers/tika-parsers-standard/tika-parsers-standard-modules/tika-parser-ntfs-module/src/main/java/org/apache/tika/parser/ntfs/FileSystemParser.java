@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -53,11 +54,15 @@ import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.XHTMLContentHandler;
 
 
-public class NTFSParser  implements Parser {
+public class FileSystemParser  implements Parser {
 
     private static final long serialVersionUID = 1L;
-    private static final Set<MediaType> SUPPORTED_TYPES =
-            Collections.singleton(MediaType.application("x-ntfs-image"));
+    private static final Set<MediaType> SUPPORTED_TYPES = Collections.unmodifiableSet(
+            new HashSet<>(Arrays.asList(MediaType.application("x-ntfs-image"),
+                    MediaType.application("x-fat12-image"),
+                    MediaType.application("x-fat16-image"),
+                    MediaType.application("x-fat32-image"),
+                    MediaType.application("x-exfat-image"))));
 
     
     // Ensure the native TSK library is loaded once
@@ -114,7 +119,7 @@ public class NTFSParser  implements Parser {
             String[] imageArray = new String[] { imagePath.toString() };
             String imageName = metadata.get(TikaCoreProperties.RESOURCE_NAME_KEY); // Use original filename as image name
             if (imageName == null || imageName.isEmpty()) {
-                imageName = "NTFS_Image_" + System.currentTimeMillis();
+                imageName = "FileSystem_Image_" + System.currentTimeMillis();
             }
 
             AddImageProcess addImageProcess = skCase.makeAddImageProcess(acquisitionTimeZone, false, false, imagePath.toString());
@@ -209,7 +214,7 @@ public class NTFSParser  implements Parser {
             }
 
         } else if (fileOrDir.isFile()) {
-            Metadata entrydata = NTFSParser.handleEntryMetadata(fileOrDir.getName(), new Date(fileOrDir.getCrtime()), new Date(fileOrDir.getMtime()), fileOrDir.getSize(), xhtml);
+            Metadata entrydata = FileSystemParser.handleEntryMetadata(fileOrDir.getName(), new Date(fileOrDir.getCrtime()), new Date(fileOrDir.getMtime()), fileOrDir.getSize(), xhtml);
 
             ReadContentInputStream fileInputStream = new ReadContentInputStream(fileOrDir);
             byte[] data = fileInputStream.readAllBytes();

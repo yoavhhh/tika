@@ -31,22 +31,24 @@ import org.apache.tika.mime.MediaType;
 
 public class NTFSDetectorTest {
 
-    private NTFSDetector detector;
+    private FileSystemDetector detector;
 
     @BeforeEach
     public void setUp() {
-        detector = new NTFSDetector();
+        detector = new FileSystemDetector();
     }
 
     @Test
     public void testDetectNTFS() throws Exception {
         // Load the dummy NTFS image created earlier
         // This stream represents a file starting with "AAA NTFS..."
+        // This test now uses FileSystemDetector, which can detect multiple types.
+        // The FileSystemDetector class itself is not renamed, only this test class.
         try (InputStream stream = getClass().getResourceAsStream("ntfs_test.img")) {
             Metadata metadata = new Metadata();
             MediaType mediaType = detector.detect(stream, metadata);
             assertEquals(MediaType.application("x-ntfs-image"), mediaType,
-                    "Should detect NTFS image");
+                    "Should detect NTFS image using FileSystemDetector");
         }
     }
 

@@ -14,7 +14,7 @@
     <packaging>jar</packaging>
 
     <name>Apache Tika NTFS Parser Module</name>
-    <description>A Tika parser module for NTFS file system images, leveraging The Sleuth Kit.</description>
+    <description>Apache Tika parser module for NTFS file system images, leveraging The Sleuth Kit.</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
