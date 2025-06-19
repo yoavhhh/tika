@@ -1280,6 +1280,21 @@
                 <artifactId>http2-common</artifactId>
                 <version>11.0.25</version>
             </coordinate>
+            <coordinate>
+                <groupId>org.xerial</groupId>
+                <artifactId>sqlite-jdbc</artifactId>
+                <version>3.25.2</version>
+            </coordinate>
+            <coordinate>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>19.0</version>
+            </coordinate>
+            <coordinate>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>SparseBitSet</artifactId>
+                <version>1.1</version>
+            </coordinate>
           </excludeCoordinates>
           <fail>true</fail>
         </configuration>
@@ -1378,7 +1393,11 @@
             <id>enforce-maven</id>
             <configuration>
               <rules>
-                <dependencyConvergence />
+                <dependencyConvergence>
+                  <excludes>
+                    <exclude>com.zaxxer:SparseBitSet</exclude>
+                  </excludes>
+                </dependencyConvergence>
                 <requireMavenVersion>
                   <version>3.5</version>
                 </requireMavenVersion>
