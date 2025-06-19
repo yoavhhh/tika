@@ -147,7 +147,7 @@
     </dependency>
     <dependency>
             <groupId>org.apache.tika</groupId>
-            <artifactId>tika-parser-ntfs-module</artifactId>
+            <artifactId>tika-parser-fs-module</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
