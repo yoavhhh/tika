@@ -58,11 +58,12 @@ public class FSParser  implements Parser {
     private static final long serialVersionUID = 1L;
     private static final Set<MediaType> SUPPORTED_TYPES =
             Collections.unmodifiableSet(Set.of(
-                MediaType.application("x-ntfs-image"), 
-                MediaType.application("x-fat32-image"), 
-                MediaType.application("x-fat16-image"), 
-                MediaType.application("x-fat12-image")));
-    
+                MediaType.application("x-ntfs-image"),
+                MediaType.application("x-fat32-image"),
+                MediaType.application("x-fat16-image"),
+                MediaType.application("x-fat12-image"),
+                MediaType.application("x-mbr-image")));
+
     // Ensure the native TSK library is loaded once
     static {
         try {

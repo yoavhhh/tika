@@ -1,2 +1,3 @@
 org.apache.tika.parser.fs.NTFSDetector
 org.apache.tika.parser.fs.FATDetector
+org.apache.tika.parser.fs.MBRDetector
