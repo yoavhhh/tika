@@ -20,7 +20,7 @@ FROM ubuntu:plucky AS base
 FROM base AS runtime
 ARG UID_GID
 ARG TIKA_VERSION
-ARG JRE='openjdk-21-jre-headless'
+ARG JRE='openjdk-17-jre-headless'
 RUN set -eux     && apt-get update     && apt-get install --yes --no-install-recommends gnupg2 software-properties-common     && apt-get update     && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends $JRE         gdal-bin         imagemagick         tesseract-ocr         tesseract-ocr-eng         tesseract-ocr-ita         tesseract-ocr-fra         tesseract-ocr-spa         tesseract-ocr-deu         tesseract-ocr-jpn     && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections     && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends         xfonts-utils         fonts-freefont-ttf         fonts-liberation         ttf-mscorefonts-installer         wget         cabextract     && apt-get clean -y     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 ARG TIKA_VERSION
 ENV TIKA_VERSION=$TIKA_VERSION
