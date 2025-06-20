@@ -106,14 +106,11 @@ public class FSParser  implements Parser {
 
         SleuthkitCase skCase = null;
         try {
-            // TODO: Check if a "dummy" case is sufficient or if more setup is needed.
-            // A database is usually created by SleuthkitCase.newCase(), which might be heavyweight.
-            // For single image parsing, a "no-database" approach might be preferable if available.
-            // For now, let's assume a unique case ID is needed.
             String caseDbPath = tmp.createTemporaryFile().toPath().toString() + ".db";
             skCase = SleuthkitCase.newCase(caseDbPath);
             
             String acquisitionTimeZone = "UTC";
+            String fakeDeviceid = "FS_Device_" + System.currentTimeMillis(); // Unique device ID for the image
             String[] imageArray = new String[] { imagePath.toString() };
             String imageName = metadata.get(TikaCoreProperties.RESOURCE_NAME_KEY); // Use original filename as image name
             if (imageName == null || imageName.isEmpty()) {
@@ -121,7 +118,7 @@ public class FSParser  implements Parser {
             }
 
             AddImageProcess addImageProcess = skCase.makeAddImageProcess(acquisitionTimeZone, false, false, imagePath.toString());
-            addImageProcess.run("device-1234", imageArray);
+            addImageProcess.run(fakeDeviceid, imageArray);
 
             List<Image> caseImages = skCase.getImages();
             if (caseImages.isEmpty()) {
@@ -208,11 +205,9 @@ public class FSParser  implements Parser {
 
         } else if (fileOrDir.isFile()) {
             Metadata entrydata = FSParser.handleEntryMetadata(fileOrDir.getName(), new Date(fileOrDir.getCrtime()), new Date(fileOrDir.getMtime()), fileOrDir.getSize(), xhtml);
-
             ReadContentInputStream fileInputStream = new ReadContentInputStream(fileOrDir);
-            byte[] data = fileInputStream.readAllBytes();
 
-            try (TikaInputStream fileTis = TikaInputStream.get(data, entrydata)) {
+            try (TikaInputStream fileTis = TikaInputStream.get(fileInputStream, entrydata)) {
                 if (extractor.shouldParseEmbedded(entrydata)) {
                     extractor.parseEmbedded(fileTis, handler, entrydata, true);
                 }
