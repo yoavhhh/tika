@@ -61,7 +61,9 @@ public class FSParser  implements Parser {
                 MediaType.application("x-ntfs-image"), 
                 MediaType.application("x-fat32-image"), 
                 MediaType.application("x-fat16-image"), 
-                MediaType.application("x-fat12-image")));
+                MediaType.application("x-fat12-image"),
+                MediaType.application("x-exfat-image"),
+                MediaType.application("x-mbr-image")));
     
     // Ensure the native TSK library is loaded once
     static {

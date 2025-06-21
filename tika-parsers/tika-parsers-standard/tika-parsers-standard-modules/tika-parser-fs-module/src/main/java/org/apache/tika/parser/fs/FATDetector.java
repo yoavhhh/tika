@@ -30,6 +30,10 @@ public class FATDetector implements Detector {
     private static final MediaType FAT12 = MediaType.application("x-fat12-image");
     private static final MediaType FAT16 = MediaType.application("x-fat16-image");
     private static final MediaType FAT32 = MediaType.application("x-fat32-image");
+    private static final MediaType EXFAT = MediaType.application("x-exfat-image");
+    private static final MediaType NTFS = MediaType.application("x-ntfs-image");
+    private static final MediaType MBR = MediaType.application("x-mbr-image");
+    
 
     @Override
     public MediaType detect(InputStream input, Metadata metadata) throws IOException {
@@ -67,6 +71,23 @@ public class FATDetector implements Detector {
             return FAT32;
         }
 
-        return MediaType.OCTET_STREAM;
+        String oemName = new String(Arrays.copyOfRange(header, 3, 8), 
+                StandardCharsets.US_ASCII).trim();
+        
+        if ("EXFAT".equals(oemName)) {
+            // ExFAT is not FAT12/16/32, but it has a similar structure
+            return EXFAT;
+        } else if ("NTFS".equals(oemName)) {
+            // NTFS is not FAT, but it is a common filesystem type
+            return NTFS;
+        }
+
+        // If we reach here, it means we have a boot sector with a signature
+        // but it does not match any known FAT12/16/32 types.
+        // This could be a non-FAT filesystem or an unrecognized FAT variant.
+        // We will return MBR as a generic fallback.
+        // MBR (Master Boot Record) is a common structure for bootable disks.
+
+        return MBR;
     }
 }
